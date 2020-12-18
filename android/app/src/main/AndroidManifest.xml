@@ -5,6 +5,12 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <!-- 음성 인식을 하기 위해 인터넷에 접속 INTERENT 권한 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- 음성을 입력받기 위해 RECORD_AUDIO 권한 필요.-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -17,8 +23,9 @@
         android:theme="@style/AppTheme.ObjectDetection">
 
         <activity android:name=".MainActivity"/>
+        <activity android:name=".DetectorActivity"/>
         <activity
-            android:name=".DetectorActivity"
+            android:name=".StartActivity"
             android:label="@string/tfe_od_app_name"
             android:screenOrientation="portrait">
             <intent-filter>

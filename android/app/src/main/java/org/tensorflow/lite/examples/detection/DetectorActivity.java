@@ -16,6 +16,7 @@
 
 package org.tensorflow.lite.examples.detection;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -33,6 +34,8 @@ import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.tensorflow.lite.examples.detection.customview.OverlayView;
@@ -48,6 +51,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import static android.speech.tts.TextToSpeech.ERROR;
 
 /*
@@ -94,9 +98,24 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
   private BorderedText borderedText;
   //TextView xyposition = (TextView) findViewById(R.id.xyPosition);
   public static Toast mToast;
+  String beverageName;
+
+  private Button button;
 
   @Override
   public void onPreviewSizeChosen(final Size size, final int rotation) {
+
+    button = (Button) findViewById(R.id.backButton);
+    button.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        finish();
+      }
+    });
+
+    Intent intent = getIntent();
+    beverageName = intent.getStringExtra("voice");
+
 
     tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
       @Override
@@ -246,7 +265,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                     display.getSize(size);
                     Log.d("DetectorActivity", size.x + "xy" + size.y);
 
-                    determine_direction(300, 300, result, "cup");
+                    determine_direction(300, 300, result, beverageName); //beverageName를 넣어줘서 비교
 
                     cropToFrameTransform.mapRect(location);
 
@@ -327,9 +346,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     int x = phone_width / 3;
     int y = phone_height / 3;
 
-    //if (true)
-    //if (result.getTitle().toString().trim() == "cup " || result.getTitle().toString() == "cup" )
-    //{
+    if (text.equals(new String("컵"))) {
+      text = "cup";
+    }
 
     RectF location = result.getLocation();
 
@@ -339,6 +358,10 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     //Toast mpoint = Toast.makeText(this.getApplicationContext(), "x: "+ midx + "y: "+midy , 1000);
     //mpoint.show();
     String res = (String) result.getTitle().toString().trim();
+
+    if(text.equals(new String("이거뭐야")) || text.equals(new String("이거 뭐야"))) {
+      ShortMessage(res);
+    }
 
     if (res.equals(text)) {
 

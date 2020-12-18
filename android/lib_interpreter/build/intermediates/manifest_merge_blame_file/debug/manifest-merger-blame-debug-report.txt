@@ -6,8 +6,8 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="21"
-8-->/Users/SUNGHYUK/Desktop/github/examples/lite/examples/object_detection/android/lib_interpreter/src/main/AndroidManifest.xml
+8-->/Users/SUNGHYUK/Desktop/Git/Creative-Space-G/android/lib_interpreter/src/main/AndroidManifest.xml
 9        android:targetSdkVersion="28" />
-9-->/Users/SUNGHYUK/Desktop/github/examples/lite/examples/object_detection/android/lib_interpreter/src/main/AndroidManifest.xml
+9-->/Users/SUNGHYUK/Desktop/Git/Creative-Space-G/android/lib_interpreter/src/main/AndroidManifest.xml
 10
 11</manifest>
