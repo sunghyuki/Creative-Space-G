@@ -66,9 +66,12 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
   // Configuration values for the prepackaged SSD model.
   private static final int TF_OD_API_INPUT_SIZE = 300;
-  private static final boolean TF_OD_API_IS_QUANTIZED = true;
-  private static final String TF_OD_API_MODEL_FILE = "detect.tflite";
-  private static final String TF_OD_API_LABELS_FILE = "labelmap.txt";
+  //private static final boolean TF_OD_API_IS_QUANTIZED = true;
+  private static final boolean TF_OD_API_IS_QUANTIZED = false;
+  //private static final String TF_OD_API_MODEL_FILE = "detect.tflite";
+  //private static final String TF_OD_API_LABELS_FILE = "labelmap.txt";
+  private static final String TF_OD_API_MODEL_FILE = "final_model.tflite";
+  private static final String TF_OD_API_LABELS_FILE = "labels.txt";
   private static final DetectorMode MODE = DetectorMode.TF_OD_API;
   // Minimum detection confidence to track a detection.
   private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.5f;
@@ -221,12 +224,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
               @Override
               public void run() {
 
-                try {
-                  Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                  // TODO Auto-generated catch block
-                  e.printStackTrace();
-                }
+
 
 
                 LOGGER.i("Running detection on image " + currTimestamp);
@@ -273,6 +271,8 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                     mappedRecognitions.add(result);
                   }
                 }
+
+
 
                 tracker.trackResults(mappedRecognitions, currTimestamp);
                 trackingOverlay.postInvalidate();
@@ -346,9 +346,25 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     int x = phone_width / 3;
     int y = phone_height / 3;
 
-    if (text.equals(new String("컵"))) {
-      text = "cup";
+    if(text.equals(new String("코카콜라"))) {
+      text = "코카콜라";
     }
+    if(text.equals(new String("펩시"))) {
+      text = "펩시";
+    }
+    if(text.equals(new String("파워에이드"))) {
+      text = "파워에이드";
+    }
+    if(text.equals(new String("레드불"))) {
+      text = "레드불";
+    }
+    if(text.equals(new String("스프라이트"))) {
+      text = "스프라이트";
+    }
+    if(text.equals(new String("환타")) | text.equals(new String("산타")) | text.equals(new String("판타"))) {
+      text = "환타";
+    }
+
 
     RectF location = result.getLocation();
 
@@ -360,55 +376,205 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     String res = (String) result.getTitle().toString().trim();
 
     if(text.equals(new String("이거뭐야")) || text.equals(new String("이거 뭐야"))) {
-      ShortMessage(res);
-    }
+      if (res.equals(new String("powerade"))) {
+        text = "코카콜라";
+        ShortMessage(text);
+      }
+      if (res.equals(new String("pepsi"))) {
+        text = "환타";
+        ShortMessage(text);
+      }
+      if (res.equals(new String("sprite"))) {
+        text = "파워에이드";
+        ShortMessage(text);
+      }
+      if (res.equals(new String("fanta")) | res.equals(new String("redbull"))) {
+        text = "레드불";
+        ShortMessage(text);
+      }
+    } else {
+        if(text.equals(new String("코카콜라"))) {
+          text = "powerade";
+          if(res.equals(text)) {
+            if (midy < y && midx > x && midx < 2 * x) {
 
-    if (res.equals(text)) {
+              ShortMessage("위에 있음");
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+              Log.d("DetectorActivity", "위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            } else if (midy < y && midx < x) {
+              ShortMessage("왼쪽 대각선 위에 있음");
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+              Log.d("DetectorActivity", "왼쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            } else if (midy < y && midx > 2 * x) {
+              ShortMessage("오른쪽 대각선 위에 있음");
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+              Log.d("DetectorActivity", "오른쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            } else if (midy > 2 * y && midx < x) {
+              ShortMessage("왼쪽 대각선 아래에 있음");
+              Log.d("DetectorActivity", "왼쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            } else if (midy > 2 * y && midx >= x && midx <= 2 * x) {
+              ShortMessage("아래에 있음");
+              Log.d("DetectorActivity", "아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            } else if (midy > 2 * y && midx > 2 * x) {
+              ShortMessage("오른쪽 대각선 아래에 있음");
+              Log.d("DetectorActivity", "오른쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            } else if (midx > 2 * x) {
+              ShortMessage("오른쪽에 있음");
+              Log.d("DetectorActivity", "오른쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            } else if (midx < x) {
+              ShortMessage("왼쪽에 있음");
+              Log.d("DetectorActivity", "왼쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+              // Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            } else {
+              ShortMessage("가운데에 있음");
+              Log.d("DetectorActivity", "가운데에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+              //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            }
 
+          }
+        }
 
-      //Toast.makeText(this, res, Toast.LENGTH_LONG).show();
-      if (midy < y && midx > x && midx < 2 * x) {
+      if(text.equals(new String("환타"))) {
+        text = "pepsi";
+        if(res.equals(text)) {
+          if (midy < y && midx > x && midx < 2 * x) {
 
-        ShortMessage("위에 있음");
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-        Log.d("DetectorActivity", "위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-      } else if (midy < y && midx < x) {
-        ShortMessage("왼쪽 대각선 위에 있음");
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-        Log.d("DetectorActivity", "왼쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-      } else if (midy < y && midx > 2 * x) {
-        ShortMessage("오른쪽 대각선 위에 있음");
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-        Log.d("DetectorActivity", "오른쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-      } else if (midy > 2 * y && midx < x) {
-        ShortMessage("왼쪽 대각선 아래에 있음");
-        Log.d("DetectorActivity", "왼쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-      } else if (midy > 2 * y && midx >= x && midx <= 2 * x) {
-        ShortMessage("아래에 있음");
-        Log.d("DetectorActivity", "아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-      } else if (midy > 2 * y && midx > 2 * x) {
-        ShortMessage("오른쪽 대각선 아래에 있음");
-        Log.d("DetectorActivity", "오른쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-      } else if (midx > 2 * x) {
-        ShortMessage("오른쪽에 있음");
-        Log.d("DetectorActivity", "오른쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-      } else if (midx < x) {
-        ShortMessage("왼쪽에 있음");
-        Log.d("DetectorActivity", "왼쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-        // Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
-      } else {
-        ShortMessage("가운데에 있음");
-        Log.d("DetectorActivity", "가운데에 있음 x 좌표: " + midx + "y 좌표:" + midy);
-        //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            ShortMessage("위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy < y && midx < x) {
+            ShortMessage("왼쪽 대각선 위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "왼쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy < y && midx > 2 * x) {
+            ShortMessage("오른쪽 대각선 위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "오른쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy > 2 * y && midx < x) {
+            ShortMessage("왼쪽 대각선 아래에 있음");
+            Log.d("DetectorActivity", "왼쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midy > 2 * y && midx >= x && midx <= 2 * x) {
+            ShortMessage("아래에 있음");
+            Log.d("DetectorActivity", "아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midy > 2 * y && midx > 2 * x) {
+            ShortMessage("오른쪽 대각선 아래에 있음");
+            Log.d("DetectorActivity", "오른쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midx > 2 * x) {
+            ShortMessage("오른쪽에 있음");
+            Log.d("DetectorActivity", "오른쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midx < x) {
+            ShortMessage("왼쪽에 있음");
+            Log.d("DetectorActivity", "왼쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            // Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else {
+            ShortMessage("가운데에 있음");
+            Log.d("DetectorActivity", "가운데에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          }
+
+        }
       }
 
+      if(text.equals(new String("파워에이드"))) {
+        text = "sprite";
+        if(res.equals(text)) {
+          if (midy < y && midx > x && midx < 2 * x) {
+
+            ShortMessage("위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy < y && midx < x) {
+            ShortMessage("왼쪽 대각선 위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "왼쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy < y && midx > 2 * x) {
+            ShortMessage("오른쪽 대각선 위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "오른쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy > 2 * y && midx < x) {
+            ShortMessage("왼쪽 대각선 아래에 있음");
+            Log.d("DetectorActivity", "왼쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midy > 2 * y && midx >= x && midx <= 2 * x) {
+            ShortMessage("아래에 있음");
+            Log.d("DetectorActivity", "아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midy > 2 * y && midx > 2 * x) {
+            ShortMessage("오른쪽 대각선 아래에 있음");
+            Log.d("DetectorActivity", "오른쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midx > 2 * x) {
+            ShortMessage("오른쪽에 있음");
+            Log.d("DetectorActivity", "오른쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midx < x) {
+            ShortMessage("왼쪽에 있음");
+            Log.d("DetectorActivity", "왼쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            // Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else {
+            ShortMessage("가운데에 있음");
+            Log.d("DetectorActivity", "가운데에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          }
+
+        }
+      }
+
+      if(text.equals(new String("레드불"))) {
+        text = "fanta";
+        if(res.equals(text)) {
+          if (midy < y && midx > x && midx < 2 * x) {
+
+            ShortMessage("위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy < y && midx < x) {
+            ShortMessage("왼쪽 대각선 위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "왼쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy < y && midx > 2 * x) {
+            ShortMessage("오른쪽 대각선 위에 있음");
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+            Log.d("DetectorActivity", "오른쪽 대각선 위에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+          } else if (midy > 2 * y && midx < x) {
+            ShortMessage("왼쪽 대각선 아래에 있음");
+            Log.d("DetectorActivity", "왼쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midy > 2 * y && midx >= x && midx <= 2 * x) {
+            ShortMessage("아래에 있음");
+            Log.d("DetectorActivity", "아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midy > 2 * y && midx > 2 * x) {
+            ShortMessage("오른쪽 대각선 아래에 있음");
+            Log.d("DetectorActivity", "오른쪽 대각선 아래에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midx > 2 * x) {
+            ShortMessage("오른쪽에 있음");
+            Log.d("DetectorActivity", "오른쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else if (midx < x) {
+            ShortMessage("왼쪽에 있음");
+            Log.d("DetectorActivity", "왼쪽에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            // Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          } else {
+            ShortMessage("가운데에 있음");
+            Log.d("DetectorActivity", "가운데에 있음 x 좌표: " + midx + "y 좌표:" + midy);
+            //Toast.makeText(this, result.getTitle().toString().trim(), Toast.LENGTH_LONG).show();
+          }
+
+        }
+      }
+
+
     }
-
-
   }
 
 //      if(String.valueOf(midx) != null) {

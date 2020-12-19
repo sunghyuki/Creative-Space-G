@@ -27,13 +27,15 @@ import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TypedValue;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+
 import org.tensorflow.lite.examples.detection.env.BorderedText;
 import org.tensorflow.lite.examples.detection.env.ImageUtils;
 import org.tensorflow.lite.examples.detection.env.Logger;
 import org.tensorflow.lite.examples.detection.tflite.Detector.Recognition;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /** A tracker that handles non-max suppression and matches existing objects to new detections. */
 public class MultiBoxTracker {
@@ -192,7 +194,27 @@ public class MultiBoxTracker {
       final TrackedRecognition trackedRecognition = new TrackedRecognition();
       trackedRecognition.detectionConfidence = potential.first;
       trackedRecognition.location = new RectF(potential.second.getLocation());
-      trackedRecognition.title = potential.second.getTitle();
+
+      if( potential.second.getTitle().equals(new String("powerade"))){
+        trackedRecognition.title = "cokecola";
+      }
+      else if ( potential.second.getTitle().equals(new String("cokecola"))){
+        trackedRecognition.title = "powerade";
+      }
+      else if ( potential.second.getTitle().equals(new String("pepsi"))){
+        trackedRecognition.title = "fanta";
+      }
+      else if ( potential.second.getTitle().equals(new String("fanta"))){
+        trackedRecognition.title = "redbull";
+      }
+      else if ( potential.second.getTitle().equals(new String("sprite"))){
+        trackedRecognition.title = "powerade";
+      }
+      else{
+        trackedRecognition.title = potential.second.getTitle();
+      }
+
+      //trackedRecognition.title = potential.second.getTitle();
       trackedRecognition.color = COLORS[trackedObjects.size()];
       trackedObjects.add(trackedRecognition);
 
