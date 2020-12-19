@@ -361,7 +361,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     if(text.equals(new String("스프라이트"))) {
       text = "스프라이트";
     }
-    if(text.equals(new String("환타")) | text.equals(new String("산타")) | text.equals(new String("판타"))) {
+    if(text.equals(new String("환타")) | text.equals(new String("산타")) | text.equals(new String("판타")) | text.equals(new String("헌")) ) {
       text = "환타";
     }
 
