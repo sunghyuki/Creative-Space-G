@@ -6,3 +6,5 @@
 ...(회고 후 정리 예정)
 
 🏆 대상
+
+http://m.press.cnumedia.com/news/articleView.html?idxno=15012
